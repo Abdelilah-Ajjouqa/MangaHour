@@ -1,0 +1,11 @@
+{
+    "@@locale": "en",
+    "appTitle": "MangaHour",
+    "@appTitle": {
+        "description": "The title of the application"
+    },
+    "homeTab": "Home",
+    "searchTab": "Search",
+    "libraryTab": "Library",
+    "settingsTab": "Settings"
+}
