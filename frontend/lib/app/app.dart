@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../core/localization/app_localizations.dart';
 import '../core/theme/app_theme.dart';
 import 'router.dart';
 
@@ -11,7 +11,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // We will hook this up to a SettingsBloc later.
     // For now, we default to Arabic RTL mode.
-    const isArabic = true; 
+    bool isArabic = true; 
     
     return MaterialApp.router(
       title: 'MangaHour',
@@ -22,14 +22,14 @@ class MainApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
 
       // Localization
-      localizationsDelegates: const [
+      localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale(isArabic ? 'ar' : 'en'),
+      locale: const Locale('ar'), // Hardcoded to Arabic for now
 
       // Routing
       routerConfig: router,
