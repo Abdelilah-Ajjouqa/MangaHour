@@ -8,26 +8,13 @@ All 17 docs in `C:\Projects\MangaHour\docs\` have been read and synthesized. The
 
 ---
 
-## User Review Required
+## User Decisions Confirmed
 
-> [!IMPORTANT]
-> **Project naming:** The Flutter project is currently named `frontend`. Should we rename it to `manga_hour` for consistency, or keep `frontend` as-is?
-
-> [!IMPORTANT]
-> **State Management:** Your docs mention BLoC. Should we go with **flutter_bloc** (Cubit + BLoC) or **Riverpod**? The plan below assumes **flutter_bloc** since it pairs naturally with Clean Architecture. Confirm or override.
-
-> [!IMPORTANT]
-> **Local DB:** Your docs confirm **Drift** (formerly Moor). The plan uses Drift throughout. Please confirm.
-
----
-
-## Open Questions
-
-> [!WARNING]
-> **App name / package ID:** What should the final Android package name and iOS bundle ID be? (e.g., `com.mangahour.app`)?
-
-> [!NOTE]
-> **Figma designs:** Not yet available. You confirmed you'll share screen-by-screen designs as we work on each feature. The plan is structured to accommodate this.
+- **Project naming:** The Flutter project directory will remain `frontend`.
+- **State Management:** **flutter_bloc** (Cubit + BLoC) will be used to pair perfectly with Clean Architecture.
+- **Local DB:** **Drift** will be used for all local database requirements (caching, favorites, reading progress, title mappings).
+- **App name / package ID:** The package name will be `com.mangahour.app` for Android and iOS.
+- **UI Design:** We will start with a **Basic & Clean MVP Design** (dark mode, rounded rectangles, clean layout) in Phase 0. A Theme Engine will be added later for user customization. You will share screen-by-screen screenshots as we tackle each Phase.
 
 ---
 
@@ -116,13 +103,13 @@ lib/
 
 | # | Task | Details |
 |---|------|---------|
-| 0.1 | **Rename & configure project** | Rename from `frontend` to `manga_hour` (if approved), set package name, update `pubspec.yaml` with all dependencies |
+| 0.1 | **Configure project** | Set package name to `com.mangahour.app`, update `pubspec.yaml` with all dependencies |
 | 0.2 | **Create folder structure** | Scaffold the full `lib/` directory tree as shown above |
 | 0.3 | **Add all dependencies** | `flutter_bloc`, `go_router`, `get_it`, `injectable`, `injectable_generator`, `dio`, `drift`, `drift_dev`, `build_runner`, `freezed`, `freezed_annotation`, `json_annotation`, `json_serializable`, `cached_network_image`, `flutter_cache_manager`, `flutter_localizations`, `intl`, `equatable`, `dartz` (or `fpdart`), `connectivity_plus` |
 | 0.4 | **Dependency Injection** | Configure `get_it` + `injectable` with `@module`, `@singleton`, `@lazySingleton` |
 | 0.5 | **Dio client + interceptors** | Create base Dio client, `JikanRateLimiterInterceptor` (3/s, 60/min), `MangaDexInterceptor` (5/s, User-Agent header), error interceptor |
 | 0.6 | **Drift database** | Define all 5 tables (`CachedManga`, `Favorites`, `ArabicTitles`, `IdMappings`, `ReadingProgress`), create DAOs, run code generation |
-| 0.7 | **Theming** | Dark-first theme, RTL-aware typography (Arabic font: Noto Kufi Arabic or Cairo; Latin: Inter), color palette |
+| 0.7 | **Theming** | Basic & Clean MVP Design (dark-first theme, rounded rectangles, clean layout), RTL-aware typography (Arabic font: Noto Kufi Arabic or Cairo; Latin: Inter), color palette |
 | 0.8 | **Localization (l10n)** | Set up `flutter_localizations`, Arabic ARB (default) + English ARB, configure `MaterialApp` with `supportedLocales`, `localizationsDelegates`, `locale` |
 | 0.9 | **GoRouter setup** | Define route constants, create shell route with bottom navigation, placeholder pages for each feature |
 | 0.10 | **Error handling foundation** | `Failure` sealed class, `ServerException`, `CacheException`, network connectivity check utility |
@@ -249,5 +236,3 @@ lib/
 ## Execution Strategy
 
 We start with **Phase 0** (scaffolding + infrastructure). This is the critical foundation — every feature depends on it. Once Phase 0 is complete and verified, we proceed feature-by-feature (Phases 1–6), with you providing the UI design for each screen as we reach it. Phase 7 runs as a final pass.
-
-**Ready to begin Phase 0 on your approval.**
