@@ -7,6 +7,7 @@ import '../../../../core/widgets/section_header.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
+import '../widgets/home_shimmer.dart';
 import '../widgets/genres_carousel.dart';
 import '../widgets/popular_manga_card.dart';
 import '../widgets/trending_manga_card.dart';
@@ -49,7 +50,7 @@ class HomeView extends StatelessWidget {
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading || state is HomeInitial) {
-            return const Center(child: CircularProgressIndicator(color: Colors.green));
+            return const HomeShimmer();
           } else if (state is HomeLoaded) {
             return CustomScrollView(
               slivers: [
