@@ -94,6 +94,13 @@ lib/
 
 ---
 
+## Core Architectural Principles
+
+- **DRY (Don't Repeat Yourself):** Always extract duplicated UI elements into reusable components in `lib/core/widgets` or shared helpers. This ensures that future scaling (like dynamic themes or AI translation overlays) can be applied instantly across the entire app by updating a single core component.
+- **Lazy Loading (Pagination):** All data lists must support lazy loading/infinite scrolling to conserve memory and API calls. For horizontal carousels, a "View All" button will lead to a dedicated paginated list screen. For vertical lists, infinite scrolling must be handled efficiently via the BLoC state.
+
+---
+
 ## Phased Implementation Plan
 
 ### Phase 0 — Project Scaffolding & Core Infrastructure
