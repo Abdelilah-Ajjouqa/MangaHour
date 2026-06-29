@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/di/injection.dart';
+import '../../../../core/widgets/app_horizontal_list.dart';
+import '../../../../core/widgets/section_header.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
 import '../widgets/genres_carousel.dart';
-import '../widgets/popular_carousel.dart';
-import '../widgets/trending_carousel.dart';
+import '../widgets/popular_manga_card.dart';
+import '../widgets/trending_manga_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -51,59 +53,55 @@ class HomeView extends StatelessWidget {
           } else if (state is HomeLoaded) {
             return CustomScrollView(
               slivers: [
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('شائع الآن', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                        Text('عرض الكل', style: TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w600)),
-                      ],
+                SliverToBoxAdapter(
+                  child: SectionHeader(
+                    title: 'شائع الآن',
+                    onViewAll: () {},
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: AppHorizontalList(
+                    items: state.trendingManga,
+                    height: 280,
+                    itemBuilder: (context, manga, index) => TrendingMangaCard(manga: manga),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SectionHeader(
+                    title: 'الأفضل',
+                    onViewAll: () {},
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: AppHorizontalList(
+                    items: state.popularManga,
+                    height: 220,
+                    itemBuilder: (context, manga, index) => SizedBox(
+                      width: 120,
+                      child: PopularMangaCard(manga: manga, index: index),
                     ),
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: TrendingCarousel(mangas: state.trendingManga),
-                ),
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('الأفضل', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                        Text('عرض الكل', style: TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: PopularCarousel(mangas: state.popularManga),
-                ),
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('تصنيفات', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                        Text('عرض الكل', style: TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
+                  child: SectionHeader(
+                    title: 'تصنيفات',
+                    onViewAll: () {},
                   ),
                 ),
                 const SliverToBoxAdapter(
                   child: GenresCarousel(),
                 ),
                 const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                    child: Text('مقترحات لك', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                  child: SectionHeader(
+                    title: 'مقترحات لك',
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: TrendingCarousel(mangas: state.popularManga.reversed.toList()), // Placeholder for suggestions
+                  child: AppHorizontalList(
+                    items: state.popularManga.reversed.toList(),
+                    height: 280,
+                    itemBuilder: (context, manga, index) => TrendingMangaCard(manga: manga),
+                  ),
                 ),
                 const SliverPadding(padding: EdgeInsets.only(bottom: 24.0)),
               ],

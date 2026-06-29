@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/widgets/manga_cover_image.dart';
 import '../../domain/entities/manga_entity.dart';
 
 class TrendingMangaCard extends StatelessWidget {
@@ -23,11 +23,9 @@ class TrendingMangaCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: CachedNetworkImage(
+              child: MangaCoverImage(
                 imageUrl: manga.coverUrl,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(color: Colors.grey[800]),
-                errorWidget: (context, url, error) => const Icon(Icons.broken_image, color: Colors.grey),
+                borderRadius: 0, // Already clipped by parent Container
               ),
             ),
             Positioned(

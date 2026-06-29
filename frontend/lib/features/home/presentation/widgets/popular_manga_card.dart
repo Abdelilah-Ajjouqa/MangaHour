@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/widgets/manga_cover_image.dart';
 import '../../domain/entities/manga_entity.dart';
 
 class PopularMangaCard extends StatelessWidget {
@@ -20,19 +20,9 @@ class PopularMangaCard extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey[900],
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: CachedNetworkImage(
+                Positioned.fill(
+                  child: MangaCoverImage(
                     imageUrl: manga.coverUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    placeholder: (context, url) => Container(color: Colors.grey[800]),
-                    errorWidget: (context, url, error) => const Icon(Icons.broken_image, color: Colors.grey),
                   ),
                 ),
                 Positioned(
