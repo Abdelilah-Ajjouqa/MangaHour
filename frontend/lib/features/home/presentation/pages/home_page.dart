@@ -5,7 +5,8 @@ import '../../../../app/di/injection.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
-import '../widgets/popular_grid.dart';
+import '../widgets/genres_carousel.dart';
+import '../widgets/popular_carousel.dart';
 import '../widgets/trending_carousel.dart';
 
 class HomePage extends StatelessWidget {
@@ -68,12 +69,32 @@ class HomeView extends StatelessWidget {
                 const SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                    child: Text('الأفضل', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('الأفضل', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                        Text('عرض الكل', style: TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  sliver: PopularGrid(mangas: state.popularManga),
+                SliverToBoxAdapter(
+                  child: PopularCarousel(mangas: state.popularManga),
+                ),
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('تصنيفات', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                        Text('عرض الكل', style: TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: GenresCarousel(),
                 ),
                 const SliverToBoxAdapter(
                   child: Padding(
