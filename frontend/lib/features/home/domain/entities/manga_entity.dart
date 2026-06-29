@@ -21,6 +21,28 @@ class MangaEntity extends Equatable {
     required this.isPublishing,
   });
 
+  MangaEntity copyWith({
+    int? malId,
+    String? title,
+    String? arabicTitle,
+    String? coverUrl,
+    double? score,
+    int? rank,
+    int? chapters,
+    bool? isPublishing,
+  }) {
+    return MangaEntity(
+      malId: malId ?? this.malId,
+      title: title ?? this.title,
+      arabicTitle: arabicTitle ?? this.arabicTitle,
+      coverUrl: coverUrl ?? this.coverUrl,
+      score: score ?? this.score,
+      rank: rank ?? this.rank,
+      chapters: chapters ?? this.chapters,
+      isPublishing: isPublishing ?? this.isPublishing,
+    );
+  }
+
   /// Helper to get the display title prioritizing Arabic
   String get displayTitle => arabicTitle ?? title;
 

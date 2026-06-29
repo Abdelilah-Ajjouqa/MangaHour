@@ -27,6 +27,19 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  Future<void> cacheArabicTitle(int id, String title) async {
+    await into(arabicTitlesTable).insertOnConflictUpdate(
+      ArabicTitlesTableData(malId: id, arabicTitle: title),
+    );
+  }
+
+  Future<Map<int, String>> getArabicTitlesForIds(List<int> malIds) async {
+    if (malIds.isEmpty) return {};
+    final query = select(arabicTitlesTable)..where((t) => t.malId.isIn(malIds));
+    final results = await query.get();
+    return {for (var r in results) r.malId: r.arabicTitle};
+  }
 }
 
 LazyDatabase _openConnection() {
