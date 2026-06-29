@@ -35,17 +35,7 @@ class HomeView extends StatelessWidget {
         backgroundColor: Colors.black,
         elevation: 0,
         title: const Text('مانجا', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 24)),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.search, color: Colors.white70),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_outline, color: Colors.white70),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: false, // Align to the right in RTL
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
