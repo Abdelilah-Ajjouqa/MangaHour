@@ -45,7 +45,7 @@ class HomeRepositoryImpl implements HomeRepository {
       final remoteManga = await remoteDataSource.getPopularManga(page: page, limit: limit);
       return Right(await _processMangaDtos(remoteManga));
     } on ServerException {
-      return const Left(ServerFailure('Failed to fetch popular manga from server'));
+      return const Left(ServerFailure('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً'));
     }
   }
 
@@ -55,7 +55,7 @@ class HomeRepositoryImpl implements HomeRepository {
       final remoteManga = await remoteDataSource.getTrendingManga(page: page, limit: limit);
       return Right(await _processMangaDtos(remoteManga));
     } on ServerException {
-      return const Left(ServerFailure('Failed to fetch trending manga from server'));
+      return const Left(ServerFailure('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً'));
     }
   }
 }

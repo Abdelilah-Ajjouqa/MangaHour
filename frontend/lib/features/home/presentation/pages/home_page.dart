@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/di/injection.dart';
 import '../../../../core/widgets/app_horizontal_list.dart';
+
 import '../../../../core/widgets/section_header.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
@@ -11,6 +12,9 @@ import '../widgets/home_shimmer.dart';
 import '../widgets/genres_carousel.dart';
 import '../widgets/popular_manga_card.dart';
 import '../widgets/trending_manga_card.dart';
+
+import '../widgets/offline_dashboard_widget.dart';
+import '../../domain/entities/manga_entity.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -98,19 +102,17 @@ class HomeView extends StatelessWidget {
               ],
             );
           } else if (state is HomeError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.message, style: const TextStyle(color: Colors.red)),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => context.read<HomeBloc>().add(LoadHomeData()),
-                    child: const Text('إعادة المحاولة'), // Retry
-                  ),
-                ],
-              ),
-            );
+            // Preview Offline Dashboard
+            // Change to true to see the Empty State, false to see the Mock Data Grid
+            const bool showEmptyState = false; 
+            
+            final mockManga = [
+              const MangaEntity(malId: 1, title: 'One Piece', arabicTitle: 'ون بيس', coverUrl: 'https://cdn.myanimelist.net/images/manga/2/253146.jpg', score: 9.2, isPublishing: true),
+              const MangaEntity(malId: 2, title: 'Berserk', arabicTitle: 'بيرسيرك', coverUrl: 'https://cdn.myanimelist.net/images/manga/1/157897.jpg', score: 9.4, isPublishing: true),
+              const MangaEntity(malId: 3, title: 'Vagabond', arabicTitle: 'فاجابوند', coverUrl: 'https://cdn.myanimelist.net/images/manga/1/259070.jpg', score: 9.0, isPublishing: false),
+            ];
+
+            return OfflineDashboardWidget(installedManga: showEmptyState ? [] : mockManga);
           }
           return const SizedBox.shrink();
         },

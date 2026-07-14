@@ -18,5 +18,5 @@ class CacheFailure extends Failure {
 }
 
 class NetworkFailure extends Failure {
-  const NetworkFailure() : super('No internet connection');
+  const NetworkFailure() : super('لا يوجد اتصال بالإنترنت');
 }
