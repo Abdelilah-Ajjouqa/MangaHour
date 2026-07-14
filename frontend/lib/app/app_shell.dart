@@ -13,7 +13,7 @@ class AppShell extends StatelessWidget {
     int currentIndex = 0;
     if (location.startsWith('/search')) {
       currentIndex = 1;
-    } else if (location.startsWith('/favorites')) {
+    } else if (location.startsWith('/library')) {
       currentIndex = 2;
     } else if (location.startsWith('/profile')) {
       currentIndex = 3;
@@ -38,7 +38,7 @@ class AppShell extends StatelessWidget {
                 context.go('/search');
                 break;
               case 2:
-                context.go('/favorites');
+                context.go('/library');
                 break;
               case 3:
                 context.go('/profile');
@@ -54,7 +54,7 @@ class AppShell extends StatelessWidget {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'الرئيسية'),
             BottomNavigationBarItem(icon: Icon(Icons.search_outlined), activeIcon: Icon(Icons.search), label: 'بحث'),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite_outline), activeIcon: Icon(Icons.favorite), label: 'المفضلة'),
+            BottomNavigationBarItem(icon: Icon(Icons.book_outlined), activeIcon: Icon(Icons.book), label: 'مكتبتي'),
             BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person), label: 'حسابي'),
           ],
         ),

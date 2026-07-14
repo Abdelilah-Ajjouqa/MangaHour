@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'app_shell.dart';
 import '../features/home/presentation/pages/home_page.dart';
 
+import '../features/library/presentation/pages/library_page.dart';
+
 // Placeholder Pages for future phases
 class PlaceholderPage extends StatelessWidget {
   final String title;
@@ -35,8 +37,8 @@ final router = GoRouter(
           builder: (context, state) => const PlaceholderPage(title: 'البحث'),
         ),
         GoRoute(
-          path: '/favorites',
-          builder: (context, state) => const PlaceholderPage(title: 'المفضلة'),
+          path: '/library',
+          builder: (context, state) => const LibraryPage(),
         ),
         GoRoute(
           path: '/profile',

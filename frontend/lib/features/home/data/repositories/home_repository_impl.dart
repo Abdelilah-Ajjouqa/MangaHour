@@ -7,14 +7,16 @@ import '../../../../core/error/failures.dart';
 import '../../domain/entities/manga_entity.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../datasources/jikan_remote_data_source.dart';
+import '../datasources/home_local_data_source.dart';
 import '../models/manga_dto.dart';
 
 @LazySingleton(as: HomeRepository)
 class HomeRepositoryImpl implements HomeRepository {
   final JikanRemoteDataSource remoteDataSource;
+  final HomeLocalDataSource localDataSource;
   final AppDatabase appDatabase;
 
-  HomeRepositoryImpl(this.remoteDataSource, this.appDatabase);
+  HomeRepositoryImpl(this.remoteDataSource, this.localDataSource, this.appDatabase);
 
   Future<List<MangaEntity>> _processMangaDtos(List<MangaDto> dtos) async {
     // 1. Cache new Arabic titles
@@ -43,7 +45,9 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<Either<Failure, List<MangaEntity>>> getPopularManga({int page = 1, int limit = 10}) async {
     try {
       final remoteManga = await remoteDataSource.getPopularManga(page: page, limit: limit);
-      return Right(await _processMangaDtos(remoteManga));
+      final entities = await _processMangaDtos(remoteManga);
+      await localDataSource.cacheManga(entities, 'popular');
+      return Right(entities);
     } on ServerException {
       return const Left(ServerFailure('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً'));
     }
@@ -53,9 +57,16 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<Either<Failure, List<MangaEntity>>> getTrendingManga({int page = 1, int limit = 10}) async {
     try {
       final remoteManga = await remoteDataSource.getTrendingManga(page: page, limit: limit);
-      return Right(await _processMangaDtos(remoteManga));
+      final entities = await _processMangaDtos(remoteManga);
+      await localDataSource.cacheManga(entities, 'trending');
+      return Right(entities);
     } on ServerException {
       return const Left(ServerFailure('تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً'));
     }
+  }
+
+  @override
+  Future<List<MangaEntity>> getOfflineManga() async {
+    return await localDataSource.getAllCachedManga();
   }
 }

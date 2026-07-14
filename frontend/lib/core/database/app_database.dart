@@ -40,6 +40,27 @@ class AppDatabase extends _$AppDatabase {
     final results = await query.get();
     return {for (var r in results) r.malId: r.arabicTitle};
   }
+
+  // --- Cached Manga Queries ---
+
+  Future<void> cacheMangaList(List<CachedMangaTableCompanion> mangaList, String cacheKey) async {
+    return transaction(() async {
+      // Clear old cache for this key
+      await (delete(cachedMangaTable)..where((t) => t.cacheKey.equals(cacheKey))).go();
+      // Insert new cache
+      await batch((batch) {
+        batch.insertAll(cachedMangaTable, mangaList);
+      });
+    });
+  }
+
+  Future<List<CachedMangaTableData>> getCachedManga(String cacheKey) async {
+    return (select(cachedMangaTable)..where((t) => t.cacheKey.equals(cacheKey))).get();
+  }
+
+  Future<List<CachedMangaTableData>> getAllCachedManga() async {
+    return select(cachedMangaTable).get();
+  }
 }
 
 LazyDatabase _openConnection() {

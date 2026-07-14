@@ -8,4 +8,7 @@ abstract class HomeRepository {
 
   /// Fetches all-time popular/top manga
   Future<Either<Failure, List<MangaEntity>>> getPopularManga({int page = 1, int limit = 10});
+
+  /// Fetches cached manga for offline dashboard
+  Future<List<MangaEntity>> getOfflineManga();
 }
