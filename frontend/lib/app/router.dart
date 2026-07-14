@@ -4,6 +4,8 @@ import 'app_shell.dart';
 import '../features/home/presentation/pages/home_page.dart';
 
 import '../features/library/presentation/pages/library_page.dart';
+import '../features/home/domain/entities/manga_entity.dart';
+import '../features/manga_detail/presentation/pages/manga_detail_page.dart';
 
 // Placeholder Pages for future phases
 class PlaceholderPage extends StatelessWidget {
@@ -45,6 +47,13 @@ final router = GoRouter(
           builder: (context, state) => const PlaceholderPage(title: 'حسابي'),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/manga/:id',
+      builder: (context, state) {
+        final manga = state.extra as MangaEntity;
+        return MangaDetailPage(manga: manga);
+      },
     ),
   ],
 );

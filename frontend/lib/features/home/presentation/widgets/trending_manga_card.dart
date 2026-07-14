@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/manga_cover_image.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/manga_entity.dart';
 
 class TrendingMangaCard extends StatelessWidget {
@@ -11,7 +12,7 @@ class TrendingMangaCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to details
+        context.push('/manga/${manga.malId}', extra: manga);
       },
       child: Container(
         width: 180,
