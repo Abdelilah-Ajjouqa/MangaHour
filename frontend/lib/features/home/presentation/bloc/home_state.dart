@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/manga_entity.dart';
+import '../../../../core/entities/manga_entity.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();

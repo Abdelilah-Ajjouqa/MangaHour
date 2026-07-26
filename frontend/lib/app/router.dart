@@ -4,7 +4,7 @@ import 'app_shell.dart';
 import '../features/home/presentation/pages/home_page.dart';
 
 import '../features/library/presentation/pages/library_page.dart';
-import '../features/home/domain/entities/manga_entity.dart';
+import '../core/entities/manga_entity.dart';
 import '../features/manga_detail/presentation/pages/manga_detail_page.dart';
 
 // Placeholder Pages for future phases

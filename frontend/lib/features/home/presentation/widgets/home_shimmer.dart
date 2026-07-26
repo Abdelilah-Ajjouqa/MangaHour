@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/shimmer_skeleton.dart';
 import '../../../../core/widgets/app_horizontal_list.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class HomeShimmer extends StatelessWidget {
   const HomeShimmer({super.key});
@@ -11,7 +12,7 @@ class HomeShimmer extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: SectionHeader(title: 'شائع الآن', onViewAll: () {}),
+          child: SectionHeader(title: AppLocalizations.of(context)!.trendingNow, onViewAll: () {}),
         ),
         SliverToBoxAdapter(
           child: AppHorizontalList<int>(
@@ -21,7 +22,7 @@ class HomeShimmer extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(
-          child: SectionHeader(title: 'الأفضل', onViewAll: () {}),
+          child: SectionHeader(title: AppLocalizations.of(context)!.best, onViewAll: () {}),
         ),
         SliverToBoxAdapter(
           child: AppHorizontalList<int>(
@@ -31,7 +32,7 @@ class HomeShimmer extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(
-          child: SectionHeader(title: 'تصنيفات', onViewAll: () {}),
+          child: SectionHeader(title: AppLocalizations.of(context)!.genres, onViewAll: () {}),
         ),
         SliverToBoxAdapter(
           child: AppHorizontalList<int>(
@@ -40,8 +41,8 @@ class HomeShimmer extends StatelessWidget {
             itemBuilder: (context, item, index) => const ShimmerSkeleton(width: 140, height: 80),
           ),
         ),
-        const SliverToBoxAdapter(
-          child: SectionHeader(title: 'مقترحات لك'),
+        SliverToBoxAdapter(
+          child: SectionHeader(title: AppLocalizations.of(context)!.recommendedForYou),
         ),
         SliverToBoxAdapter(
           child: AppHorizontalList<int>(

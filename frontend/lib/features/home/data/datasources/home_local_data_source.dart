@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:injectable/injectable.dart';
-import '../../../../core/database/app_database.dart';
-import '../../domain/entities/manga_entity.dart';
+import '../../../../core/database/daos/manga_dao.dart';
+import '../../../../core/database/app_database.dart' show CachedMangaTableCompanion, CachedMangaTableData;
+import '../../../../core/entities/manga_entity.dart';
 
 abstract class HomeLocalDataSource {
   Future<void> cacheManga(List<MangaEntity> mangas, String cacheKey);
@@ -11,9 +12,9 @@ abstract class HomeLocalDataSource {
 
 @LazySingleton(as: HomeLocalDataSource)
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
-  final AppDatabase appDatabase;
+  final MangaDao mangaDao;
 
-  HomeLocalDataSourceImpl(this.appDatabase);
+  HomeLocalDataSourceImpl(this.mangaDao);
 
   @override
   Future<void> cacheManga(List<MangaEntity> mangas, String cacheKey) async {
@@ -27,25 +28,25 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       cacheKey: cacheKey,
     )).toList();
 
-    await appDatabase.cacheMangaList(companions, cacheKey);
+    await mangaDao.cacheMangaList(companions, cacheKey);
     
     // Also cache the Arabic titles since it's a separate table
     for (var m in mangas) {
       if (m.arabicTitle != null) {
-        await appDatabase.cacheArabicTitle(m.malId, m.arabicTitle!);
+        await mangaDao.cacheArabicTitle(m.malId, m.arabicTitle!);
       }
     }
   }
 
   @override
   Future<List<MangaEntity>> getCachedManga(String cacheKey) async {
-    final cachedData = await appDatabase.getCachedManga(cacheKey);
+    final cachedData = await mangaDao.getCachedManga(cacheKey);
     return _mapToEntities(cachedData);
   }
 
   @override
   Future<List<MangaEntity>> getAllCachedManga() async {
-    final cachedData = await appDatabase.getAllCachedManga();
+    final cachedData = await mangaDao.getAllCachedManga();
     
     // Remove duplicates based on malId if they exist in multiple cache keys
     final uniqueMap = <int, CachedMangaTableData>{};
@@ -59,7 +60,7 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
     if (cachedData.isEmpty) return [];
 
     final malIds = cachedData.map((e) => e.malId).toList();
-    final arabicTitles = await appDatabase.getArabicTitlesForIds(malIds);
+    final arabicTitles = await mangaDao.getArabicTitlesForIds(malIds);
 
     return cachedData.map((data) => MangaEntity(
       malId: data.malId,

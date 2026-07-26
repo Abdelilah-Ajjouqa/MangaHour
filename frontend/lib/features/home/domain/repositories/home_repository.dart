@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
-import '../entities/manga_entity.dart';
+import '../../../../core/entities/manga_entity.dart';
 
 abstract class HomeRepository {
   /// Fetches trending (currently publishing) manga

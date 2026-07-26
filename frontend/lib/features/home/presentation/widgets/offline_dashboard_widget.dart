@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/manga_entity.dart';
+import '../../../../core/localization/app_localizations.dart';
+import '../../../../core/entities/manga_entity.dart';
 import 'popular_manga_card.dart';
 
 class OfflineDashboardWidget extends StatelessWidget {
@@ -20,23 +21,21 @@ class OfflineDashboardWidget extends StatelessWidget {
             Icon(
               Icons.folder_off_rounded,
               size: 80,
-              color: Colors.white24,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.24),
             ),
             const SizedBox(height: 24),
             Text(
-              'لا يوجد محتوى محمل محلياً',
-              style: const TextStyle(
-                color: Colors.white54,
-                fontSize: 18,
+              AppLocalizations.of(context)!.noOfflineContent,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.54),
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              'يرجى الاتصال بالإنترنت لتحميل المانجا',
-              style: TextStyle(
-                color: Colors.white38,
-                fontSize: 14,
+              AppLocalizations.of(context)!.connectInternetToDownload,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
               ),
             ),
           ],
@@ -52,10 +51,9 @@ class OfflineDashboardWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
               child: Text(
-                'المانجا المحملة', // Downloaded Manga
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontSize: 22,
+                AppLocalizations.of(context)!.downloadedManga,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),

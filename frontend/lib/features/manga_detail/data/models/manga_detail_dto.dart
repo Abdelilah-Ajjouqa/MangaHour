@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../home/data/models/manga_dto.dart';
+import '../../../../core/models/shared_dtos.dart';
+import '../../../../core/utils/arabic_title_extractor.dart';
 import '../../domain/entities/manga_detail_entity.dart';
 
 part 'manga_detail_dto.freezed.dart';
@@ -26,15 +27,6 @@ abstract class MangaDetailDto with _$MangaDetailDto {
   factory MangaDetailDto.fromJson(Map<String, dynamic> json) => _$MangaDetailDtoFromJson(json);
 
   MangaDetailEntity toEntity() {
-    String? arabicTitle;
-    if (titles != null) {
-      for (final t in titles!) {
-        if (t.type != null && t.type!.toLowerCase() == 'arabic') {
-          arabicTitle = t.title;
-          break;
-        }
-      }
-    }
 
     String authorName = 'غير معروف';
     if (authors != null && authors!.isNotEmpty) {
@@ -44,7 +36,7 @@ abstract class MangaDetailDto with _$MangaDetailDto {
     return MangaDetailEntity(
       malId: malId,
       title: title,
-      arabicTitle: arabicTitle,
+      arabicTitle: ArabicTitleExtractor.extract(titles),
       coverUrl: images.jpg.largeImageUrl ?? images.jpg.imageUrl,
       score: score ?? 0.0,
       isPublishing: publishing,

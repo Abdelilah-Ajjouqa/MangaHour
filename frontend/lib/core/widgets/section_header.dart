@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import '../localization/app_localizations.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onViewAll;
-  final String viewAllText;
+  final String? viewAllText;
 
   const SectionHeader({
     super.key,
     required this.title,
     this.onViewAll,
-    this.viewAllText = 'عرض الكل',
+    this.viewAllText,
   });
 
   @override
@@ -21,14 +22,17 @@ class SectionHeader extends StatelessWidget {
         children: [
           Text(
             title, 
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           if (onViewAll != null)
             GestureDetector(
               onTap: onViewAll,
               child: Text(
-                viewAllText, 
-                style: const TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.w600),
+                viewAllText ?? AppLocalizations.of(context)!.viewAll, 
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
         ],

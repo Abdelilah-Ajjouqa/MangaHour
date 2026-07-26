@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/localization/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/di/injection.dart';
-import '../../../home/domain/usecases/get_offline_manga_usecase.dart';
-import '../../../home/domain/entities/manga_entity.dart';
+import '../bloc/library_bloc.dart';
+import '../bloc/library_event.dart';
+import '../bloc/library_state.dart';
 import '../../../home/presentation/widgets/offline_dashboard_widget.dart';
 
 class LibraryPage extends StatelessWidget {
@@ -12,37 +16,39 @@ class LibraryPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           toolbarHeight: 0, // Removes the large empty title space
-          bottom: const TabBar(
-            indicatorColor: Colors.green,
-            labelColor: Colors.green,
-            unselectedLabelColor: Colors.grey,
+          bottom: TabBar(
             tabs: [
-              Tab(text: 'المفضلة'), // Favorites
-              Tab(text: 'تنزيلاتي'), // Downloads
+              Tab(text: AppLocalizations.of(context)!.favoritesTab), // Favorites
+              Tab(text: AppLocalizations.of(context)!.downloadsTab), // Downloads
             ],
           ),
         ),
         body: TabBarView(
           children: [
             // Favorites Tab (Placeholder for now)
-            const Center(
-              child: Text('قريباً...', style: TextStyle(color: Colors.white70, fontSize: 20)),
+            Center(
+              child: Text(AppLocalizations.of(context)!.comingSoon, style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              )),
             ),
-            // Downloads Tab
-            FutureBuilder<List<MangaEntity>>(
-              future: getIt<GetOfflineMangaUseCase>().call(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator(color: Colors.green));
-                }
-                
-                final installedManga = snapshot.data ?? [];
-                return OfflineDashboardWidget(installedManga: installedManga);
-              },
+            BlocProvider(
+              create: (context) => getIt<LibraryBloc>()..add(LoadOfflineManga()),
+              child: BlocBuilder<LibraryBloc, LibraryState>(
+                builder: (context, state) {
+                  if (state is LibraryLoading) {
+                    return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary));
+                  } else if (state is LibraryLoaded) {
+                    return OfflineDashboardWidget(installedManga: state.offlineManga);
+                  } else if (state is LibraryError) {
+                    return Center(child: Text(state.message, style: TextStyle(color: Theme.of(context).colorScheme.error)));
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
           ],
         ),

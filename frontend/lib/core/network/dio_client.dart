@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:flutter/foundation.dart';
 
 import 'jikan_rate_limiter.dart';
 import 'mangadex_interceptor.dart';
@@ -19,7 +20,7 @@ abstract class NetworkModule {
     
     dio.interceptors.addAll([
       JikanRateLimiterInterceptor(),
-      LogInterceptor(responseBody: true, requestBody: true),
+      if (kDebugMode) LogInterceptor(responseBody: true, requestBody: true),
     ]);
     
     return dio;
@@ -38,7 +39,7 @@ abstract class NetworkModule {
     
     dio.interceptors.addAll([
       MangaDexInterceptor(),
-      LogInterceptor(responseBody: true, requestBody: true),
+      if (kDebugMode) LogInterceptor(responseBody: true, requestBody: true),
     ]);
     
     return dio;

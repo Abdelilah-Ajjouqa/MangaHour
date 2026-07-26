@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../localization/app_localizations.dart';
 
 class AppHorizontalList<T> extends StatelessWidget {
   final List<T> items;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
   final double height;
   final double itemSpacing;
-  final String emptyMessage;
+  final String? emptyMessage;
 
   const AppHorizontalList({
     super.key,
@@ -13,7 +14,7 @@ class AppHorizontalList<T> extends StatelessWidget {
     required this.itemBuilder,
     required this.height,
     this.itemSpacing = 12.0,
-    this.emptyMessage = 'لا توجد بيانات',
+    this.emptyMessage,
   });
 
   @override
@@ -22,7 +23,7 @@ class AppHorizontalList<T> extends StatelessWidget {
       return SizedBox(
         height: height, 
         child: Center(
-          child: Text(emptyMessage, style: const TextStyle(color: Colors.white)),
+          child: Text(emptyMessage ?? AppLocalizations.of(context)!.noData, style: Theme.of(context).textTheme.bodyMedium),
         ),
       );
     }

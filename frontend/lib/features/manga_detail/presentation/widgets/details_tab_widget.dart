@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../domain/entities/manga_detail_entity.dart';
 
 class DetailsTabWidget extends StatefulWidget {
@@ -31,21 +32,19 @@ class _DetailsTabWidgetState extends State<DetailsTabWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildStatBox(
-          icon: Icons.star,
-          value: widget.mangaDetail.score.toStringAsFixed(1),
-          label: 'التقييم',
+          icon: Icons.star_rounded,
+          value: widget.mangaDetail.score > 0 ? widget.mangaDetail.score.toString() : AppLocalizations.of(context)!.unknown,
+          label: AppLocalizations.of(context)!.rating,
         ),
-        const SizedBox(width: 16),
         _buildStatBox(
-          icon: Icons.menu_book,
-          value: widget.mangaDetail.totalChapters > 0 ? widget.mangaDetail.totalChapters.toString() : '؟',
-          label: 'عدد الفصول',
+          icon: Icons.format_list_bulleted_rounded,
+          value: widget.mangaDetail.totalChapters > 0 ? widget.mangaDetail.totalChapters.toString() : AppLocalizations.of(context)!.unknown,
+          label: AppLocalizations.of(context)!.chaptersCount,
         ),
-        const SizedBox(width: 16),
         _buildStatBox(
-          icon: Icons.update,
+          icon: Icons.info_outline_rounded,
           value: widget.mangaDetail.status,
-          label: 'الحالة',
+          label: AppLocalizations.of(context)!.status,
         ),
       ],
     );
@@ -56,22 +55,24 @@ class _DetailsTabWidgetState extends State<DetailsTabWidget> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(color: Colors.grey[800]!),
+          border: Border.all(color: Theme.of(context).dividerColor),
         ),
         child: Column(
           children: [
-            Icon(icon, color: Colors.green, size: 24),
+            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(
               label,
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
             ),
           ],
         ),
@@ -88,12 +89,12 @@ class _DetailsTabWidgetState extends State<DetailsTabWidget> {
             Container(
               width: 4,
               height: 20,
-              color: Colors.green,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 8),
-            const Text(
-              'القصة',
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context)!.synopsis,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -101,7 +102,7 @@ class _DetailsTabWidgetState extends State<DetailsTabWidget> {
         Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: Colors.grey[900],
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12.0),
           ),
           child: Column(
@@ -109,7 +110,10 @@ class _DetailsTabWidgetState extends State<DetailsTabWidget> {
             children: [
               Text(
                 widget.mangaDetail.synopsis,
-                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.5),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  height: 1.5,
+                ),
                 maxLines: isExpanded ? null : 4,
                 overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
               ),
@@ -124,12 +128,14 @@ class _DetailsTabWidgetState extends State<DetailsTabWidget> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      isExpanded ? 'عرض أقل' : 'اقرأ المزيد',
-                      style: const TextStyle(color: Colors.green, fontSize: 14),
+                      isExpanded ? AppLocalizations.of(context)!.showLess : AppLocalizations.of(context)!.readMore,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     Icon(
                       isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                      color: Colors.green,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 20,
                     ),
                   ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/manga_cover_image.dart';
+import '../../../../core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import '../../domain/entities/manga_entity.dart';
+import '../../../../core/entities/manga_entity.dart';
 
 class PopularMangaCard extends StatelessWidget {
   final MangaEntity manga;
@@ -31,12 +32,12 @@ class PopularMangaCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: const BoxDecoration(
-                      color: Colors.black87,
+                      color: AppColors.overlay,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${index + 1}',
-                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -48,20 +49,20 @@ class PopularMangaCard extends StatelessWidget {
             manga.displayTitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
           ),
           const SizedBox(height: 4),
           Row(
             children: [
-              const Icon(Icons.star, color: Colors.green, size: 14),
+              const Icon(Icons.star, color: AppColors.star, size: 14),
               const SizedBox(width: 4),
               Text(
                 manga.score.toStringAsFixed(1),
-                style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
               ),
             ],
           ),

@@ -1,4 +1,4 @@
-import '../../../home/domain/entities/manga_entity.dart';
+import '../../../../core/entities/manga_entity.dart';
 
 class MangaDetailEntity extends MangaEntity {
   final String synopsis;

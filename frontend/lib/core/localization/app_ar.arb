@@ -3,6 +3,49 @@
     "appTitle": "مانجا أور",
     "homeTab": "الرئيسية",
     "searchTab": "بحث",
-    "libraryTab": "المكتبة",
-    "settingsTab": "الإعدادات"
+    "libraryTab": "مكتبتي",
+    "profileTab": "حسابي",
+    "noData": "لا توجد بيانات",
+    "retry": "إعادة المحاولة",
+    "viewAll": "عرض الكل",
+    "trendingNow": "شائع الآن",
+    "best": "الأفضل",
+    "genres": "تصنيفات",
+    "recommendedForYou": "مقترحات لك",
+    "chapterPrefix": "الفصل {chapter}",
+    "@chapterPrefix": {
+        "placeholders": {
+            "chapter": {
+                "type": "String"
+            }
+        }
+    },
+    "newBadge": "جديد",
+    "authorPrefix": "الكاتب: {author}",
+    "@authorPrefix": {
+        "placeholders": {
+            "author": {
+                "type": "String"
+            }
+        }
+    },
+    "detailsTab": "التفاصيل",
+    "chaptersTab": "الفصول",
+    "readNow": "اقرأ الآن",
+    "rating": "التقييم",
+    "chaptersCount": "عدد الفصول",
+    "status": "الحالة",
+    "synopsis": "القصة",
+    "showLess": "عرض أقل",
+    "readMore": "اقرأ المزيد",
+    "ongoing": "مستمر",
+    "completed": "مكتمل",
+    "favoritesTab": "المفضلة",
+    "downloadsTab": "تنزيلاتي",
+    "noOfflineContent": "لا يوجد محتوى محمل محلياً",
+    "connectInternetToDownload": "يرجى الاتصال بالإنترنت لتحميل المانجا",
+    "downloadedManga": "المانجا المحملة",
+    "unknown": "غير معروف",
+    "noSynopsis": "لا توجد قصة متاحة.",
+    "comingSoon": "قريباً..."
 }

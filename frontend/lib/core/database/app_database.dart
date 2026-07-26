@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
+import 'daos/manga_dao.dart';
 
 import 'tables/cached_manga_table.dart';
 import 'tables/favorites_table.dart';
@@ -20,6 +21,8 @@ part 'app_database.g.dart';
   ArabicTitlesTable,
   IdMappingsTable,
   ReadingProgressTable,
+], daos: [
+  MangaDao,
 ])
 @lazySingleton
 class AppDatabase extends _$AppDatabase {
@@ -27,40 +30,6 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
-
-  Future<void> cacheArabicTitle(int id, String title) async {
-    await into(arabicTitlesTable).insertOnConflictUpdate(
-      ArabicTitlesTableData(malId: id, arabicTitle: title),
-    );
-  }
-
-  Future<Map<int, String>> getArabicTitlesForIds(List<int> malIds) async {
-    if (malIds.isEmpty) return {};
-    final query = select(arabicTitlesTable)..where((t) => t.malId.isIn(malIds));
-    final results = await query.get();
-    return {for (var r in results) r.malId: r.arabicTitle};
-  }
-
-  // --- Cached Manga Queries ---
-
-  Future<void> cacheMangaList(List<CachedMangaTableCompanion> mangaList, String cacheKey) async {
-    return transaction(() async {
-      // Clear old cache for this key
-      await (delete(cachedMangaTable)..where((t) => t.cacheKey.equals(cacheKey))).go();
-      // Insert new cache
-      await batch((batch) {
-        batch.insertAll(cachedMangaTable, mangaList);
-      });
-    });
-  }
-
-  Future<List<CachedMangaTableData>> getCachedManga(String cacheKey) async {
-    return (select(cachedMangaTable)..where((t) => t.cacheKey.equals(cacheKey))).get();
-  }
-
-  Future<List<CachedMangaTableData>> getAllCachedManga() async {
-    return select(cachedMangaTable).get();
-  }
 }
 
 LazyDatabase _openConnection() {

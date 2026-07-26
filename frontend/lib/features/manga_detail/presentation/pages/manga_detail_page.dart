@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 import '../../../../app/di/injection.dart';
-import '../../../home/domain/entities/manga_entity.dart';
+import '../../../../core/entities/manga_entity.dart';
 import '../bloc/manga_detail_bloc.dart';
 import '../bloc/manga_detail_event.dart';
 import '../bloc/manga_detail_state.dart';
@@ -22,20 +23,20 @@ class MangaDetailPage extends StatelessWidget {
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 _buildSliverAppBar(context),
-                _buildSliverTabBar(),
+                _buildSliverTabBar(context),
               ];
             },
             body: BlocBuilder<MangaDetailBloc, MangaDetailState>(
               builder: (context, state) {
                 if (state is MangaDetailLoading || state is MangaDetailInitial) {
-                  return const Center(child: CircularProgressIndicator(color: Colors.green));
+                  return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary));
                 } else if (state is MangaDetailError) {
-                  return Center(child: Text(state.message, style: const TextStyle(color: Colors.red)));
+                  return Center(child: Text(state.message, style: TextStyle(color: Theme.of(context).colorScheme.error)));
                 } else if (state is MangaDetailLoaded) {
                   return TabBarView(
                     children: [
@@ -61,14 +62,14 @@ class MangaDetailPage extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: expandedHeight,
       pinned: true,
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurface),
         onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.more_vert, color: Colors.white),
+          icon: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSurface),
           onPressed: () {},
         ),
       ],
@@ -94,7 +95,7 @@ class MangaDetailPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Container(
-                color: Colors.black.withValues(alpha: 0.5 + (scrollPercentage * 0.3)), // Darken slightly as it collapses
+                color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5 + (scrollPercentage * 0.3)), // Darken slightly as it collapses
               ),
               // Foreground Content (Cover Card, Title, Author)
               Positioned(
@@ -123,9 +124,7 @@ class MangaDetailPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: Text(
                             manga.arabicTitle ?? manga.title,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
@@ -141,8 +140,10 @@ class MangaDetailPage extends StatelessWidget {
                               author = state.manga.author;
                             }
                             return Text(
-                              'الكاتب: $author',
-                              style: const TextStyle(color: Colors.grey, fontSize: 14),
+                              AppLocalizations.of(context)!.authorPrefix(author),
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                              ),
                             );
                           },
                         ),
@@ -160,9 +161,7 @@ class MangaDetailPage extends StatelessWidget {
                   opacity: titleOpacity,
                   child: Text(
                     manga.arabicTitle ?? manga.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -178,17 +177,14 @@ class MangaDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSliverTabBar() {
+  Widget _buildSliverTabBar(BuildContext context) {
     return SliverPersistentHeader(
       pinned: true,
       delegate: _SliverAppBarDelegate(
-        const TabBar(
-          indicatorColor: Colors.green,
-          labelColor: Colors.green,
-          unselectedLabelColor: Colors.grey,
+        TabBar(
           tabs: [
-            Tab(text: 'التفاصيل'),
-            Tab(text: 'الفصول'),
+            Tab(text: AppLocalizations.of(context)!.detailsTab),
+            Tab(text: AppLocalizations.of(context)!.chaptersTab),
           ],
         ),
       ),
@@ -198,12 +194,12 @@ class MangaDetailPage extends StatelessWidget {
   Widget _buildReadNowButton(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      color: Colors.black,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.black,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
@@ -212,12 +208,12 @@ class MangaDetailPage extends StatelessWidget {
           onPressed: () {
             // Navigate to Reader Page
           },
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('اقرأ الآن', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(width: 8),
-              Icon(Icons.play_circle_fill),
+              Text(AppLocalizations.of(context)!.readNow, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 8),
+              const Icon(Icons.play_circle_fill),
             ],
           ),
         ),
@@ -239,7 +235,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Colors.black,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: _tabBar,
     );
   }

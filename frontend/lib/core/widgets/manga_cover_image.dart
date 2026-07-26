@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 class MangaCoverImage extends StatelessWidget {
   final String imageUrl;
@@ -22,7 +23,7 @@ class MangaCoverImage extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
-        color: Colors.grey[900],
+        color: AppColors.surfaceVariant,
       ),
       clipBehavior: Clip.antiAlias,
       child: CachedNetworkImage(
@@ -30,9 +31,9 @@ class MangaCoverImage extends StatelessWidget {
         fit: BoxFit.cover,
         width: width ?? double.infinity,
         height: height ?? double.infinity,
-        placeholder: (context, url) => Container(color: Colors.grey[800]),
+        placeholder: (context, url) => Container(color: AppColors.surfaceVariant),
         errorWidget: (context, url, error) => const Center(
-          child: Icon(Icons.broken_image, color: Colors.grey),
+          child: Icon(Icons.broken_image, color: AppColors.textSecondary),
         ),
       ),
     );

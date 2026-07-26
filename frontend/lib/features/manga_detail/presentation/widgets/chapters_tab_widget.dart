@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class ChaptersTabWidget extends StatelessWidget {
   const ChaptersTabWidget({super.key});
@@ -16,18 +17,20 @@ class ChaptersTabWidget extends StatelessWidget {
         return ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           title: Text(
-            'الفصل $chapterNumber',
-            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            AppLocalizations.of(context)!.chapterPrefix(chapterNumber.toString()),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             '22 أكتوبر 2023', // Mock date
-            style: TextStyle(color: Colors.grey[500], fontSize: 12),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+            ),
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: const Icon(Icons.download_rounded, color: Colors.grey),
+                icon: Icon(Icons.download_rounded, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
                 onPressed: () {},
               ),
             ],

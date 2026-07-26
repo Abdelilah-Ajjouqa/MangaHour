@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 import '../../../../app/di/injection.dart';
 import '../../../../core/widgets/app_horizontal_list.dart';
@@ -35,7 +36,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Dark theme background
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Dark theme background
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
@@ -46,7 +47,7 @@ class HomeView extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: SectionHeader(
-                    title: 'شائع الآن',
+                    title: AppLocalizations.of(context)!.trendingNow,
                     onViewAll: () {},
                   ),
                 ),
@@ -59,7 +60,7 @@ class HomeView extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: SectionHeader(
-                    title: 'الأفضل',
+                    title: AppLocalizations.of(context)!.best,
                     onViewAll: () {},
                   ),
                 ),
@@ -75,16 +76,16 @@ class HomeView extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: SectionHeader(
-                    title: 'تصنيفات',
+                    title: AppLocalizations.of(context)!.genres,
                     onViewAll: () {},
                   ),
                 ),
                 const SliverToBoxAdapter(
                   child: GenresCarousel(),
                 ),
-                const SliverToBoxAdapter(
+                SliverToBoxAdapter(
                   child: SectionHeader(
-                    title: 'مقترحات لك',
+                    title: AppLocalizations.of(context)!.recommendedForYou,
                   ),
                 ),
                 SliverToBoxAdapter(

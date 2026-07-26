@@ -32,8 +32,8 @@ class GenresCarousel extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 gradient: LinearGradient(
                   colors: [
-                    Colors.green.withValues(alpha: 0.6),
-                    Colors.black87,
+                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
+                    Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -42,9 +42,7 @@ class GenresCarousel extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 genre,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),

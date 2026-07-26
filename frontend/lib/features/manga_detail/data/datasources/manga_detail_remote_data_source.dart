@@ -16,14 +16,14 @@ class MangaDetailRemoteDataSourceImpl implements MangaDetailRemoteDataSource {
   @override
   Future<MangaDetailDto> getMangaDetails(int id) async {
     try {
-      final response = await dio.get('https://api.jikan.moe/v4/manga/$id/full');
+      final response = await dio.get('/manga/$id/full');
       if (response.statusCode == 200) {
         return MangaDetailDto.fromJson(response.data['data']);
       } else {
         throw ServerException('Failed to load manga details');
       }
-    } catch (e) {
-      throw ServerException('Failed to connect to server');
+    } on DioException catch (e) {
+      throw ServerException(e.message ?? 'Failed to connect to server');
     }
   }
 }
