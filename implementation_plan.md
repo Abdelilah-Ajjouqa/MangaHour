@@ -243,3 +243,28 @@ lib/
 ## Execution Strategy
 
 We start with **Phase 0** (scaffolding + infrastructure). This is the critical foundation — every feature depends on it. Once Phase 0 is complete and verified, we proceed feature-by-feature (Phases 1–6), with you providing the UI design for each screen as we reach it. Phase 7 runs as a final pass.
+
+---
+
+## Future Phase: Custom Backend (BFF) Architecture
+To bypass Jikan and MangaDex rate limits and provide a lightning-fast experience, a custom Python backend is planned.
+
+### Technology Stack
+- **Language:** Python 3.10+
+- **Framework:** FastAPI (High performance, async, auto-generates Swagger documentation).
+- **Database:** PostgreSQL (SQLAlchemy ORM). Utilizing `JSONB` columns to store massive, flexible MangaDex JSON data while maintaining strict relational links (like Users -> Favorites).
+- **Caching Layer:** Redis. Highly accessed endpoints (like the homepage's Top Manga) will be served directly from Redis in <1ms.
+- **Task Scheduling:** `APScheduler` or `Celery` for background scraping.
+- **Deployment:** `docker-compose` to spin up PostgreSQL and Redis side-by-side locally.
+
+### Tiered Fetching Strategy
+To provide fast chapter updates while respecting external API limits, the scraper will use two separate schedules:
+1. **The "Heavy" Scraper (Every 12 - 24 Hours):** Fetches Top Manga, Covers, Synopses, and Genres. Very intensive, updates the heavy PostgreSQL JSONB columns.
+2. **The "Fast" Scraper (Every 15 - 30 Minutes):** Hits only the lightweight "Latest Updates" endpoint of MangaDex to instantly cache new chapter releases into Redis.
+
+### API Layer
+The Flutter app will consume simplified endpoints:
+- `GET /api/v1/manga/popular` (From Redis)
+- `GET /api/v1/manga/{id}`
+- `GET /api/v1/manga/{id}/chapters`
+- `GET /api/v1/chapters/{id}/pages`
