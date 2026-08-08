@@ -8,6 +8,7 @@ import '../core/entities/manga_entity.dart';
 import '../features/manga_detail/presentation/pages/manga_detail_page.dart';
 import '../core/widgets/manga_list_page.dart';
 import '../features/profile/presentation/pages/profile_page.dart';
+import '../features/reader/presentation/pages/manga_reader_page.dart';
 
 // Placeholder Pages for future phases
 class PlaceholderPage extends StatelessWidget {
@@ -64,6 +65,13 @@ final router = GoRouter(
         final String title = extra['title'] as String;
         final List<MangaEntity> items = extra['items'] as List<MangaEntity>;
         return MangaListPage(title: title, mangaList: items);
+      },
+    ),
+    GoRoute(
+      path: '/reader/:chapterId',
+      builder: (context, state) {
+        final String chapterId = state.pathParameters['chapterId']!;
+        return MangaReaderPage(chapterId: chapterId);
       },
     ),
   ],

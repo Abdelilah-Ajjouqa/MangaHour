@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/localization/app_localizations.dart';
 
 import '../../../../app/di/injection.dart';
@@ -223,7 +224,7 @@ class MangaDetailPage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            // Navigate to Reader Page
+            context.push('/reader/${manga.malId}');
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
