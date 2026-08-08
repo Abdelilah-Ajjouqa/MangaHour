@@ -5,7 +5,12 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
-import 'daos/manga_dao.dart';
+
+import 'daos/cached_manga_dao.dart';
+import 'daos/arabic_titles_dao.dart';
+import 'daos/favorites_dao.dart';
+import 'daos/reading_progress_dao.dart';
+import 'daos/id_mappings_dao.dart';
 
 import 'tables/cached_manga_table.dart';
 import 'tables/favorites_table.dart';
@@ -15,15 +20,22 @@ import 'tables/reading_progress_table.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [
-  CachedMangaTable,
-  FavoritesTable,
-  ArabicTitlesTable,
-  IdMappingsTable,
-  ReadingProgressTable,
-], daos: [
-  MangaDao,
-])
+@DriftDatabase(
+  tables: [
+    CachedMangaTable,
+    FavoritesTable,
+    ArabicTitlesTable,
+    IdMappingsTable,
+    ReadingProgressTable,
+  ],
+  daos: [
+    CachedMangaDao,
+    ArabicTitlesDao,
+    FavoritesDao,
+    ReadingProgressDao,
+    IdMappingsDao,
+  ],
+)
 @lazySingleton
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -37,13 +49,7 @@ LazyDatabase _openConnection() {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'mangahour_db.sqlite'));
 
-    // Database file location
-
-    // Make sqlite3 pick a more suitable location for temporary files - the
-    // one from the system may be inaccessible due to sandboxing.
     final cachebase = (await getTemporaryDirectory()).path;
-    // We can't access /tmp on Android, which sqlite3 tries to use.
-    // Tell it to use the app's cache directory instead.
     sqlite3.tempDirectory = cachebase;
 
     return NativeDatabase.createInBackground(file);

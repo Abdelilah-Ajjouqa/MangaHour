@@ -8,7 +8,7 @@ import '../../../../app/di/injection.dart';
 import '../bloc/library_bloc.dart';
 import '../bloc/library_event.dart';
 import '../bloc/library_state.dart';
-import '../../../home/presentation/widgets/offline_dashboard_widget.dart';
+import '../../../../core/widgets/offline_dashboard_widget.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({super.key});

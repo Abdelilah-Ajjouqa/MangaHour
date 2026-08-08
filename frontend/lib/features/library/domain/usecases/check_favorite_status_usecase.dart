@@ -12,7 +12,7 @@ class CheckFavoriteStatusUseCase implements UseCase<bool, int> {
   CheckFavoriteStatusUseCase(this.repository);
 
   @override
-  Future<Either<Failure, bool>> call(int params) async {
-    return await repository.isFavorite(params);
+  Future<Either<Failure, bool>> call(int params) {
+    return repository.isFavorite(params);
   }
 }

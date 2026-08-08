@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
 
+import '../constants/api_constants.dart';
 import 'jikan_rate_limiter.dart';
 import 'mangadex_interceptor.dart';
 
@@ -12,9 +13,9 @@ abstract class NetworkModule {
   Dio get jikanDio {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.jikan.moe/v4',
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        baseUrl: ApiConstants.jikanBaseUrl,
+        connectTimeout: ApiConstants.connectTimeout,
+        receiveTimeout: ApiConstants.receiveTimeout,
       ),
     );
     
@@ -31,9 +32,9 @@ abstract class NetworkModule {
   Dio get mangadexDio {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.mangadex.org',
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        baseUrl: ApiConstants.mangadexBaseUrl,
+        connectTimeout: ApiConstants.connectTimeout,
+        receiveTimeout: ApiConstants.receiveTimeout,
       ),
     );
     

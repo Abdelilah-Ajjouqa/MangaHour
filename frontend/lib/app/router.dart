@@ -8,25 +8,17 @@ import '../core/entities/manga_entity.dart';
 import '../features/manga_detail/presentation/pages/manga_detail_page.dart';
 import '../core/widgets/manga_list_page.dart';
 import '../features/profile/presentation/pages/profile_page.dart';
+import '../features/settings/presentation/pages/settings_page.dart';
 import '../features/reader/presentation/pages/manga_reader_page.dart';
-
-// Placeholder Pages for future phases
-class PlaceholderPage extends StatelessWidget {
-  final String title;
-  const PlaceholderPage({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), backgroundColor: Colors.black, centerTitle: true),
-      body: const Center(child: Text('قريباً...', style: TextStyle(color: Colors.white70, fontSize: 20))), // "Coming Soon"
-    );
-  }
-}
 
 final router = GoRouter(
   initialLocation: '/',
+  errorBuilder: (context, state) => Scaffold(
+    appBar: AppBar(title: const Text('الصفحة غير موجودة')),
+    body: Center(
+      child: Text('الرابط المطلوبة غير موجودة: ${state.uri}'),
+    ),
+  ),
   routes: [
     ShellRoute(
       builder: (context, state, child) {
@@ -50,6 +42,10 @@ final router = GoRouter(
           builder: (context, state) => const ProfilePage(),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsPage(),
     ),
     GoRoute(
       path: '/manga/:id',

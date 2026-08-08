@@ -2,6 +2,7 @@ arb-dir: lib/core/localization
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 output-class: AppLocalizations
+output-dir: lib/core/localization
 preferred-supported-locales:
   - ar
   - en

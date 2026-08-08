@@ -17,11 +17,11 @@ class ToggleFavoriteUseCase implements UseCase<void, MangaEntity> {
     final isFav = await repository.isFavorite(params.malId);
     return isFav.fold(
       (failure) => Left(failure),
-      (isFavorite) async {
+      (isFavorite) {
         if (isFavorite) {
-          return await repository.removeFavorite(params.malId);
+          return repository.removeFavorite(params.malId);
         } else {
-          return await repository.addFavorite(params);
+          return repository.addFavorite(params);
         }
       },
     );

@@ -13,7 +13,7 @@ class GetFavoritesUseCase implements UseCase<List<MangaEntity>, NoParams> {
   GetFavoritesUseCase(this.repository);
 
   @override
-  Future<Either<Failure, List<MangaEntity>>> call(NoParams params) async {
-    return await repository.getFavorites();
+  Future<Either<Failure, List<MangaEntity>>> call(NoParams params) {
+    return repository.getFavorites();
   }
 }

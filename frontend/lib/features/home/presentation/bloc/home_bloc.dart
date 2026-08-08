@@ -21,13 +21,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onLoadHomeData(LoadHomeData event, Emitter<HomeState> emit) async {
     emit(HomeLoading());
 
-    final results = await Future.wait([
+    final (trendingResult, popularResult) = await (
       getTrendingManga(const PaginationParams(limit: 10)),
       getPopularManga(const PaginationParams(limit: 10)),
-    ]);
-
-    final trendingResult = results[0];
-    final popularResult = results[1];
+    ).wait;
 
     trendingResult.fold(
       (failure) => emit(HomeError(failure.message)),
@@ -36,9 +33,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           (failure) => emit(HomeError(failure.message)),
           (popularManga) {
             emit(HomeLoaded(
-              // The results are typed dynamically due to Future.wait not inferring Either<Failure, List<MangaEntity>> perfectly sometimes without casts, but since both return the same type, we can cast them safely.
-              trendingManga: trendingManga as dynamic,
-              popularManga: popularManga as dynamic,
+              trendingManga: trendingManga,
+              popularManga: popularManga,
             ));
           },
         );

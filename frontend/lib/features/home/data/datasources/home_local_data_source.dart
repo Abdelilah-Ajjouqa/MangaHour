@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:injectable/injectable.dart';
-import '../../../../core/database/daos/manga_dao.dart';
+import '../../../../core/database/daos/cached_manga_dao.dart';
+import '../../../../core/database/daos/arabic_titles_dao.dart';
 import '../../../../core/database/app_database.dart' show CachedMangaTableCompanion, CachedMangaTableData;
 import '../../../../core/entities/manga_entity.dart';
 
@@ -12,9 +13,10 @@ abstract class HomeLocalDataSource {
 
 @LazySingleton(as: HomeLocalDataSource)
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
-  final MangaDao mangaDao;
+  final CachedMangaDao cachedMangaDao;
+  final ArabicTitlesDao arabicTitlesDao;
 
-  HomeLocalDataSourceImpl(this.mangaDao);
+  HomeLocalDataSourceImpl(this.cachedMangaDao, this.arabicTitlesDao);
 
   @override
   Future<void> cacheManga(List<MangaEntity> mangas, String cacheKey) async {
@@ -28,27 +30,25 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       cacheKey: cacheKey,
     )).toList();
 
-    await mangaDao.cacheMangaList(companions, cacheKey);
+    await cachedMangaDao.cacheMangaList(companions, cacheKey);
     
-    // Also cache the Arabic titles since it's a separate table
     for (var m in mangas) {
       if (m.arabicTitle != null) {
-        await mangaDao.cacheArabicTitle(m.malId, m.arabicTitle!);
+        await arabicTitlesDao.cacheArabicTitle(m.malId, m.arabicTitle!);
       }
     }
   }
 
   @override
   Future<List<MangaEntity>> getCachedManga(String cacheKey) async {
-    final cachedData = await mangaDao.getCachedManga(cacheKey);
+    final cachedData = await cachedMangaDao.getCachedManga(cacheKey);
     return _mapToEntities(cachedData);
   }
 
   @override
   Future<List<MangaEntity>> getAllCachedManga() async {
-    final cachedData = await mangaDao.getAllCachedManga();
+    final cachedData = await cachedMangaDao.getAllCachedManga();
     
-    // Remove duplicates based on malId if they exist in multiple cache keys
     final uniqueMap = <int, CachedMangaTableData>{};
     for (var data in cachedData) {
       uniqueMap[data.malId] = data;
@@ -60,7 +60,7 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
     if (cachedData.isEmpty) return [];
 
     final malIds = cachedData.map((e) => e.malId).toList();
-    final arabicTitles = await mangaDao.getArabicTitlesForIds(malIds);
+    final arabicTitles = await arabicTitlesDao.getArabicTitlesForIds(malIds);
 
     return cachedData.map((data) => MangaEntity(
       malId: data.malId,
@@ -68,7 +68,7 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       arabicTitle: arabicTitles[data.malId],
       coverUrl: data.imageUrl,
       score: data.score ?? 0.0,
-      isPublishing: false, // Defaulting to false for offline cache
+      isPublishing: false,
     )).toList();
   }
 }

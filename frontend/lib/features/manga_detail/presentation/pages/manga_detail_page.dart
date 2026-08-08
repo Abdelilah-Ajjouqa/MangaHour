@@ -57,7 +57,7 @@ class MangaDetailPage extends StatelessWidget {
   }
 
   Widget _buildSliverAppBar(BuildContext context) {
-    final double expandedHeight = 400.0;
+    const double expandedHeight = 400.0;
     final double collapsedHeight = kToolbarHeight + MediaQuery.of(context).padding.top;
 
     return SliverAppBar(

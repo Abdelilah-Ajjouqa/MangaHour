@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/database/daos/manga_dao.dart';
+import '../../../../core/database/daos/arabic_titles_dao.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/entities/manga_entity.dart';
@@ -14,24 +14,25 @@ import '../models/manga_dto.dart';
 class HomeRepositoryImpl implements HomeRepository {
   final JikanRemoteDataSource remoteDataSource;
   final HomeLocalDataSource localDataSource;
-  final MangaDao mangaDao;
+  final ArabicTitlesDao arabicTitlesDao;
 
-  HomeRepositoryImpl(this.remoteDataSource, this.localDataSource, this.mangaDao);
+  HomeRepositoryImpl(
+    this.remoteDataSource,
+    this.localDataSource,
+    this.arabicTitlesDao,
+  );
 
   Future<List<MangaEntity>> _processMangaDtos(List<MangaDto> dtos) async {
-    // 1. Cache new Arabic titles
     for (var dto in dtos) {
       final entity = dto.toEntity();
       if (entity.arabicTitle != null) {
-        await mangaDao.cacheArabicTitle(dto.malId, entity.arabicTitle!);
+        await arabicTitlesDao.cacheArabicTitle(dto.malId, entity.arabicTitle!);
       }
     }
 
-    // 2. Lookup missing Arabic titles
     final missingIds = dtos.where((d) => d.toEntity().arabicTitle == null).map((d) => d.malId).toList();
-    final cachedTitles = await mangaDao.getArabicTitlesForIds(missingIds);
+    final cachedTitles = await arabicTitlesDao.getArabicTitlesForIds(missingIds);
 
-    // 3. Construct final entities
     return dtos.map((dto) {
       var entity = dto.toEntity();
       if (entity.arabicTitle == null && cachedTitles.containsKey(dto.malId)) {
@@ -66,7 +67,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<List<MangaEntity>> getOfflineManga() async {
-    return await localDataSource.getAllCachedManga();
+  Future<List<MangaEntity>> getOfflineManga() {
+    return localDataSource.getAllCachedManga();
   }
 }

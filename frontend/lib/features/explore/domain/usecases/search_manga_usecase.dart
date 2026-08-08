@@ -13,7 +13,7 @@ class SearchMangaUseCase implements UseCase<List<MangaEntity>, String> {
   SearchMangaUseCase(this.repository);
 
   @override
-  Future<Either<Failure, List<MangaEntity>>> call(String params) async {
-    return await repository.searchManga(params);
+  Future<Either<Failure, List<MangaEntity>>> call(String params) {
+    return repository.searchManga(params);
   }
 }
