@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'app_shell.dart';
 import '../features/home/presentation/pages/home_page.dart';
-
+import '../features/explore/presentation/pages/explore_page.dart';
 import '../features/library/presentation/pages/library_page.dart';
 import '../core/entities/manga_entity.dart';
 import '../features/manga_detail/presentation/pages/manga_detail_page.dart';
@@ -36,7 +36,7 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/search',
-          builder: (context, state) => const PlaceholderPage(title: 'البحث'),
+          builder: (context, state) => const ExplorePage(),
         ),
         GoRoute(
           path: '/library',
