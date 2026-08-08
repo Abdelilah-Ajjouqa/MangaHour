@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/mock/mock_data.dart';
+import '../../../home/data/models/manga_dto.dart';
+import '../../../../core/widgets/manga_cover_image.dart';
 
 import '../../../../core/localization/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,11 +33,42 @@ class LibraryPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            // Favorites Tab (Placeholder for now)
-            Center(
-              child: Text(AppLocalizations.of(context)!.comingSoon, style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-              )),
+            // Favorites Tab (Mock Data for now)
+            GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.65,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: 3, // Just a few for mock layout
+              itemBuilder: (context, index) {
+                // Generate a mock entity
+                final dto = MangaDto.fromJson(MockData.popularMangaList[index]);
+                final manga = dto.toEntity();
+                return GestureDetector(
+                  onTap: () => context.push('/manga/${manga.malId}', extra: manga),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: MangaCoverImage(imageUrl: manga.coverUrl),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        manga.arabicTitle ?? manga.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             BlocProvider(
               create: (context) => getIt<LibraryBloc>()..add(LoadOfflineManga()),

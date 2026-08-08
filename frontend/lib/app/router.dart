@@ -6,6 +6,8 @@ import '../features/explore/presentation/pages/explore_page.dart';
 import '../features/library/presentation/pages/library_page.dart';
 import '../core/entities/manga_entity.dart';
 import '../features/manga_detail/presentation/pages/manga_detail_page.dart';
+import '../core/widgets/manga_list_page.dart';
+import '../features/profile/presentation/pages/profile_page.dart';
 
 // Placeholder Pages for future phases
 class PlaceholderPage extends StatelessWidget {
@@ -44,7 +46,7 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/profile',
-          builder: (context, state) => const PlaceholderPage(title: 'حسابي'),
+          builder: (context, state) => const ProfilePage(),
         ),
       ],
     ),
@@ -53,6 +55,15 @@ final router = GoRouter(
       builder: (context, state) {
         final manga = state.extra as MangaEntity;
         return MangaDetailPage(manga: manga);
+      },
+    ),
+    GoRoute(
+      path: '/list',
+      builder: (context, state) {
+        final Map<String, dynamic> extra = state.extra as Map<String, dynamic>;
+        final String title = extra['title'] as String;
+        final List<MangaEntity> items = extra['items'] as List<MangaEntity>;
+        return MangaListPage(title: title, mangaList: items);
       },
     ),
   ],

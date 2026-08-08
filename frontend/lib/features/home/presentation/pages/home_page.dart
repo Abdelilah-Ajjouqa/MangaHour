@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/localization/app_localizations.dart';
 
 import '../../../../app/di/injection.dart';
@@ -48,7 +49,12 @@ class HomeView extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: SectionHeader(
                     title: AppLocalizations.of(context)!.trendingNow,
-                    onViewAll: () {},
+                    onViewAll: () {
+                      context.push('/list', extra: {
+                        'title': AppLocalizations.of(context)!.trendingNow,
+                        'items': state.trendingManga,
+                      });
+                    },
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -61,7 +67,12 @@ class HomeView extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: SectionHeader(
                     title: AppLocalizations.of(context)!.best,
-                    onViewAll: () {},
+                    onViewAll: () {
+                      context.push('/list', extra: {
+                        'title': AppLocalizations.of(context)!.best,
+                        'items': state.popularManga,
+                      });
+                    },
                   ),
                 ),
                 SliverToBoxAdapter(
