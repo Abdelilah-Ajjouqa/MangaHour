@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/error/exceptions.dart';
+import '../../../../core/mock/mock_data.dart';
 import '../models/manga_dto.dart';
 
 abstract class JikanRemoteDataSource {
@@ -17,50 +17,15 @@ class JikanRemoteDataSourceImpl implements JikanRemoteDataSource {
 
   @override
   Future<List<MangaDto>> getPopularManga({int page = 1, int limit = 10}) async {
-    try {
-      final response = await dio.get(
-        '/top/manga',
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-          'type': 'manga',
-        },
-      );
-      
-      if (response.statusCode == 200) {
-        final List data = response.data['data'];
-        return data.map((json) => MangaDto.fromJson(json)).toList();
-      } else {
-        throw ServerException('Failed to load popular manga');
-      }
-    } on DioException {
-      throw ServerException('Failed to load popular manga');
-    }
+    // Simulate network latency
+    await Future.delayed(const Duration(seconds: 1));
+    return MockData.popularMangaList.map((json) => MangaDto.fromJson(json)).toList();
   }
 
   @override
   Future<List<MangaDto>> getTrendingManga({int page = 1, int limit = 10}) async {
-    try {
-      final response = await dio.get(
-        '/manga',
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-          'status': 'publishing',
-          'order_by': 'popularity',
-          'sort': 'asc',
-          'sfw': true,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final List data = response.data['data'];
-        return data.map((json) => MangaDto.fromJson(json)).toList();
-      } else {
-        throw ServerException('Failed to load trending manga');
-      }
-    } on DioException {
-      throw ServerException('Failed to load trending manga');
-    }
+    // Simulate network latency
+    await Future.delayed(const Duration(seconds: 1));
+    return MockData.trendingMangaList.map((json) => MangaDto.fromJson(json)).toList();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../../core/error/exceptions.dart';
+import '../../../../../core/mock/mock_data.dart';
 import '../models/manga_detail_dto.dart';
 
 abstract class MangaDetailRemoteDataSource {
@@ -15,15 +15,8 @@ class MangaDetailRemoteDataSourceImpl implements MangaDetailRemoteDataSource {
 
   @override
   Future<MangaDetailDto> getMangaDetails(int id) async {
-    try {
-      final response = await dio.get('/manga/$id/full');
-      if (response.statusCode == 200) {
-        return MangaDetailDto.fromJson(response.data['data']);
-      } else {
-        throw ServerException('Failed to load manga details');
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? 'Failed to connect to server');
-    }
+    // Simulate network latency
+    await Future.delayed(const Duration(seconds: 1));
+    return MangaDetailDto.fromJson(MockData.mangaDetail);
   }
 }
