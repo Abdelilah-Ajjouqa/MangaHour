@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_dimens.dart';
 import '../localization/app_localizations.dart';
 
 class AppErrorWidget extends StatelessWidget {
@@ -43,7 +44,7 @@ class AppErrorWidget extends StatelessWidget {
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: AppDimens.cardRadius,
                   ),
                 ),
                 icon: const Icon(Icons.refresh_rounded),
