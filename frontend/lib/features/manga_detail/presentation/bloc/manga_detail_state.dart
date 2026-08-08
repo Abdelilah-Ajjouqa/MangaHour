@@ -14,11 +14,22 @@ class MangaDetailLoading extends MangaDetailState {}
 
 class MangaDetailLoaded extends MangaDetailState {
   final MangaDetailEntity manga;
+  final bool isFavorite;
 
-  const MangaDetailLoaded(this.manga);
+  const MangaDetailLoaded({required this.manga, this.isFavorite = false});
+
+  MangaDetailLoaded copyWith({
+    MangaDetailEntity? manga,
+    bool? isFavorite,
+  }) {
+    return MangaDetailLoaded(
+      manga: manga ?? this.manga,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 
   @override
-  List<Object> get props => [manga];
+  List<Object> get props => [manga, isFavorite];
 }
 
 class MangaDetailError extends MangaDetailState {

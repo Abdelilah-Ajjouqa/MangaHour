@@ -15,3 +15,10 @@ class LoadMangaDetail extends MangaDetailEvent {
   @override
   List<Object> get props => [mangaId];
 }
+
+class ToggleFavorite extends MangaDetailEvent {
+  const ToggleFavorite();
+
+  @override
+  List<Object> get props => [];
+}

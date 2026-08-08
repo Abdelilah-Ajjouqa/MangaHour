@@ -4,9 +4,11 @@ import '../app_database.dart';
 import '../tables/cached_manga_table.dart';
 import '../tables/arabic_titles_table.dart';
 
+import '../tables/favorites_table.dart';
+
 part 'manga_dao.g.dart';
 
-@DriftAccessor(tables: [CachedMangaTable, ArabicTitlesTable])
+@DriftAccessor(tables: [CachedMangaTable, ArabicTitlesTable, FavoritesTable])
 @lazySingleton
 class MangaDao extends DatabaseAccessor<AppDatabase> with _$MangaDaoMixin {
   MangaDao(super.db);
@@ -39,5 +41,26 @@ class MangaDao extends DatabaseAccessor<AppDatabase> with _$MangaDaoMixin {
 
   Future<List<CachedMangaTableData>> getAllCachedManga() async {
     return select(cachedMangaTable).get();
+  }
+
+  // --- Favorites Logic ---
+  
+  Future<void> addFavorite(FavoritesTableCompanion favorite) async {
+    await into(favoritesTable).insertOnConflictUpdate(favorite);
+  }
+
+  Future<void> removeFavorite(int malId) async {
+    await (delete(favoritesTable)..where((t) => t.malId.equals(malId))).go();
+  }
+
+  Future<bool> isFavorite(int malId) async {
+    final query = select(favoritesTable)..where((t) => t.malId.equals(malId));
+    final result = await query.getSingleOrNull();
+    return result != null;
+  }
+
+  Future<List<FavoritesTableData>> getFavorites() async {
+    final query = select(favoritesTable)..orderBy([(t) => OrderingTerm(expression: t.addedAt, mode: OrderingMode.desc)]);
+    return await query.get();
   }
 }

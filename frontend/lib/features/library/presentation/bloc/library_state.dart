@@ -7,9 +7,10 @@ class LibraryInitial extends LibraryState {}
 class LibraryLoading extends LibraryState {}
 
 class LibraryLoaded extends LibraryState {
+  final List<MangaEntity> favorites;
   final List<MangaEntity> offlineManga;
 
-  LibraryLoaded(this.offlineManga);
+  LibraryLoaded({required this.favorites, required this.offlineManga});
 }
 
 class LibraryError extends LibraryState {

@@ -68,6 +68,23 @@ class MangaDetailPage extends StatelessWidget {
         onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
+        BlocBuilder<MangaDetailBloc, MangaDetailState>(
+          builder: (context, state) {
+            bool isFavorite = false;
+            if (state is MangaDetailLoaded) {
+              isFavorite = state.isFavorite;
+            }
+            return IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : Theme.of(context).colorScheme.onSurface,
+              ),
+              onPressed: () {
+                context.read<MangaDetailBloc>().add(const ToggleFavorite());
+              },
+            );
+          },
+        ),
         IconButton(
           icon: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSurface),
           onPressed: () {},
