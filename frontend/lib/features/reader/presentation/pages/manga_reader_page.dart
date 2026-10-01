@@ -4,19 +4,37 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/di/injection.dart';
+import '../../../../core/widgets/error_widget.dart';
 import '../bloc/manga_reader_bloc.dart';
 import '../bloc/manga_reader_event.dart';
 import '../bloc/manga_reader_state.dart';
 
 class MangaReaderPage extends StatelessWidget {
   final String chapterId;
+  final int? malId;
+  final String? mangadexId;
+  final String? chapterTitle;
 
-  const MangaReaderPage({super.key, required this.chapterId});
+  const MangaReaderPage({
+    super.key,
+    required this.chapterId,
+    this.malId,
+    this.mangadexId,
+    this.chapterTitle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<MangaReaderBloc>()..add(LoadChapter(chapterId)),
+      create: (context) => getIt<MangaReaderBloc>()
+        ..add(
+          LoadChapter(
+            chapterId: chapterId,
+            malId: malId,
+            mangadexId: mangadexId,
+            chapterTitle: chapterTitle,
+          ),
+        ),
       child: const _MangaReaderView(),
     );
   }
@@ -28,6 +46,7 @@ class _MangaReaderView extends StatelessWidget {
   void _showSettingsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (bottomSheetContext) {
         return BlocProvider.value(
           value: context.read<MangaReaderBloc>(),
@@ -37,7 +56,7 @@ class _MangaReaderView extends StatelessWidget {
               children: [
                 const ListTile(
                   title: Text(
-                    'Reading Mode',
+                    'وضع القراءة',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -48,32 +67,34 @@ class _MangaReaderView extends StatelessWidget {
                         children: [
                           // ignore: deprecated_member_use
                           RadioListTile<ReadingMode>(
-                            title: const Text('Horizontal (RTL)'),
+                            title: const Text(
+                              'أفقي من اليمين لليسار (RTL - مانجا)',
+                            ),
                             value: ReadingMode.horizontalRtl,
                             // ignore: deprecated_member_use
                             groupValue: state.readingMode,
                             // ignore: deprecated_member_use
                             onChanged: (value) {
                               if (value != null) {
-                                context
-                                    .read<MangaReaderBloc>()
-                                    .add(ChangeReadingMode(value));
+                                context.read<MangaReaderBloc>().add(
+                                  ChangeReadingMode(value),
+                                );
                                 Navigator.pop(context);
                               }
                             },
                           ),
                           // ignore: deprecated_member_use
                           RadioListTile<ReadingMode>(
-                            title: const Text('Vertical (Webtoon)'),
+                            title: const Text('عمودي (ويب تون / مانهوا)'),
                             value: ReadingMode.verticalWebtoon,
                             // ignore: deprecated_member_use
                             groupValue: state.readingMode,
                             // ignore: deprecated_member_use
                             onChanged: (value) {
                               if (value != null) {
-                                context
-                                    .read<MangaReaderBloc>()
-                                    .add(ChangeReadingMode(value));
+                                context.read<MangaReaderBloc>().add(
+                                  ChangeReadingMode(value),
+                                );
                                 Navigator.pop(context);
                               }
                             },
@@ -108,14 +129,29 @@ class _MangaReaderView extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is MangaReaderLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            );
           }
 
           if (state is MangaReaderError) {
             return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red),
+              child: AppErrorWidget(
+                message: state.message,
+                onRetry: () {
+                  final readerPage = context
+                      .findAncestorWidgetOfExactType<MangaReaderPage>();
+                  if (readerPage != null) {
+                    context.read<MangaReaderBloc>().add(
+                      LoadChapter(
+                        chapterId: readerPage.chapterId,
+                        malId: readerPage.malId,
+                        mangadexId: readerPage.mangadexId,
+                        chapterTitle: readerPage.chapterTitle,
+                      ),
+                    );
+                  }
+                },
               ),
             );
           }
@@ -138,22 +174,30 @@ class _MangaReaderView extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Container(
-                      color: Colors.black.withValues(alpha: 0.7),
+                      color: Colors.black.withValues(alpha: 0.75),
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).padding.top),
+                        top: MediaQuery.of(context).padding.top,
+                      ),
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.arrow_back, color: Colors.white),
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
                             onPressed: () {
-                               // Reset SystemUI when exiting reader
-                               SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-                               Navigator.of(context).pop();
-                            }
+                              SystemChrome.setEnabledSystemUIMode(
+                                SystemUiMode.edgeToEdge,
+                              );
+                              Navigator.of(context).pop();
+                            },
                           ),
                           const Spacer(),
                           IconButton(
-                            icon: const Icon(Icons.more_vert, color: Colors.white),
+                            icon: const Icon(
+                              Icons.settings_outlined,
+                              color: Colors.white,
+                            ),
                             onPressed: () => _showSettingsBottomSheet(context),
                           ),
                         ],
@@ -168,14 +212,15 @@ class _MangaReaderView extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Container(
-                      color: Colors.black.withValues(alpha: 0.7),
+                      color: Colors.black.withValues(alpha: 0.75),
                       padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom > 0
-                              ? MediaQuery.of(context).padding.bottom
-                              : 16,
-                          top: 16,
-                          left: 16,
-                          right: 16),
+                        bottom: MediaQuery.of(context).padding.bottom > 0
+                            ? MediaQuery.of(context).padding.bottom
+                            : 16,
+                        top: 16,
+                        left: 16,
+                        right: 16,
+                      ),
                       child: Center(
                         child: Text(
                           '${state.currentPage + 1} / ${state.pages.length}',
@@ -201,7 +246,7 @@ class _MangaReaderView extends StatelessWidget {
   Widget _buildContentView(BuildContext context, MangaReaderLoaded state) {
     if (state.readingMode == ReadingMode.horizontalRtl) {
       return PageView.builder(
-        reverse: true, // RTL swiping
+        reverse: true, // RTL swiping for manga
         itemCount: state.pages.length,
         onPageChanged: (index) {
           context.read<MangaReaderBloc>().add(PageChanged(index));
@@ -213,18 +258,22 @@ class _MangaReaderView extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: state.pages[index],
               fit: BoxFit.contain,
-              placeholder: (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) =>
-                  const Icon(Icons.error, color: Colors.red),
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(
+                  Icons.broken_image_rounded,
+                  color: Colors.white54,
+                  size: 48,
+                ),
+              ),
             ),
           );
         },
       );
     } else {
       // Vertical Webtoon Mode
-      // For simplicity in MVP, we just use a standard list view.
-      // In a real app we might use `scrollable_positioned_list` or an intersection observer.
       return ListView.builder(
         itemCount: state.pages.length,
         itemBuilder: (context, index) {
@@ -233,10 +282,20 @@ class _MangaReaderView extends StatelessWidget {
             fit: BoxFit.fitWidth,
             placeholder: (context, url) => const SizedBox(
               height: 400,
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
             ),
-            errorWidget: (context, url, error) =>
-                const Icon(Icons.error, color: Colors.red),
+            errorWidget: (context, url, error) => const SizedBox(
+              height: 200,
+              child: Center(
+                child: Icon(
+                  Icons.broken_image_rounded,
+                  color: Colors.white54,
+                  size: 48,
+                ),
+              ),
+            ),
           );
         },
       );

@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 
 abstract class AppDimens {
   // Border Radius
+  static const double radiusSmall = 8.0;
+  static const double radiusMedium = 12.0;
+  static const double radiusLarge = 16.0;
   static const double cardBorderRadius = 12.0;
   static const double chipBorderRadius = 8.0;
   static const double buttonBorderRadius = 10.0;
 
-  static final BorderRadius cardRadius = BorderRadius.circular(cardBorderRadius);
-  static final BorderRadius chipRadius = BorderRadius.circular(chipBorderRadius);
-  static final BorderRadius buttonRadius = BorderRadius.circular(buttonBorderRadius);
+  static final BorderRadius cardRadius = BorderRadius.circular(
+    cardBorderRadius,
+  );
+  static final BorderRadius chipRadius = BorderRadius.circular(
+    chipBorderRadius,
+  );
+  static final BorderRadius buttonRadius = BorderRadius.circular(
+    buttonBorderRadius,
+  );
 
   // Spacing & Padding
   static const double paddingSmall = 8.0;

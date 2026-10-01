@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'app_shell.dart';
 import '../features/home/presentation/pages/home_page.dart';
 import '../features/explore/presentation/pages/explore_page.dart';
@@ -15,9 +16,7 @@ final router = GoRouter(
   initialLocation: '/',
   errorBuilder: (context, state) => Scaffold(
     appBar: AppBar(title: const Text('الصفحة غير موجودة')),
-    body: Center(
-      child: Text('الرابط المطلوبة غير موجودة: ${state.uri}'),
-    ),
+    body: Center(child: Text('الرابط المطلوبة غير موجودة: ${state.uri}')),
   ),
   routes: [
     ShellRoute(
@@ -25,10 +24,7 @@ final router = GoRouter(
         return AppShell(child: child);
       },
       routes: [
-        GoRoute(
-          path: '/',
-          builder: (context, state) => const HomePage(),
-        ),
+        GoRoute(path: '/', builder: (context, state) => const HomePage()),
         GoRoute(
           path: '/search',
           builder: (context, state) => const ExplorePage(),
@@ -67,7 +63,13 @@ final router = GoRouter(
       path: '/reader/:chapterId',
       builder: (context, state) {
         final String chapterId = state.pathParameters['chapterId']!;
-        return MangaReaderPage(chapterId: chapterId);
+        final extra = state.extra as Map<String, dynamic>?;
+        return MangaReaderPage(
+          chapterId: chapterId,
+          malId: extra?['malId'] as int?,
+          mangadexId: extra?['mangadexId'] as String?,
+          chapterTitle: extra?['chapterTitle'] as String?,
+        );
       },
     ),
   ],

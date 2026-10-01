@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'manga_reader_state.dart';
 
 abstract class MangaReaderEvent extends Equatable {
@@ -10,11 +11,19 @@ abstract class MangaReaderEvent extends Equatable {
 
 class LoadChapter extends MangaReaderEvent {
   final String chapterId;
+  final int? malId;
+  final String? mangadexId;
+  final String? chapterTitle;
 
-  const LoadChapter(this.chapterId);
+  const LoadChapter({
+    required this.chapterId,
+    this.malId,
+    this.mangadexId,
+    this.chapterTitle,
+  });
 
   @override
-  List<Object?> get props => [chapterId];
+  List<Object?> get props => [chapterId, malId, mangadexId, chapterTitle];
 }
 
 class PageChanged extends MangaReaderEvent {
