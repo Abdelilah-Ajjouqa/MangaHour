@@ -16,6 +16,7 @@ services:
       retries: 10
   migrate:
     build: .
+    image: mangahourapi:latest
     environment: &backend_environment
       DATABASE_URL: postgresql+psycopg://mangahour:mangahour@db:5432/mangahour
     command: ["alembic", "upgrade", "head"]
@@ -24,6 +25,7 @@ services:
         condition: service_healthy
   api:
     build: .
+    image: mangahourapi:latest
     environment: *backend_environment
     ports:
       - "127.0.0.1:8000:8000"
@@ -32,6 +34,7 @@ services:
         condition: service_completed_successfully
   worker:
     build: .
+    image: mangahourapi:latest
     environment: *backend_environment
     command: ["python", "-m", "app.worker"]
     profiles: ["worker"]
