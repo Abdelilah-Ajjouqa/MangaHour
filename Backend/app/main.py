@@ -5,6 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from app.catalog import router
 from app.database import get_engine, get_session
 
 
@@ -17,6 +18,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="MangaHour API", version="0.1.0", lifespan=lifespan)
+app.include_router(router)
 
 
 @app.get("/health/live", tags=["health"])

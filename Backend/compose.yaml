@@ -28,7 +28,7 @@ services:
     image: mangahourapi:latest
     environment: *backend_environment
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8100:8000"
     depends_on:
       migrate:
         condition: service_completed_successfully
